@@ -6,4 +6,4 @@ version: 0.0.1
 home: https://github.com/superseb/overlay-check
 sources:
 - https://github.com/superseb/overlay-check
-icon: https://raw.githubusercontent.com/superseb/sebs-charts/master/logo.png
+icon: https://raw.githubusercontent.com/superseb/sebs-charts/master/charts/overlay-check/logo.png
