@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ include "overlay-check.name" . }}
+    app.kubernetes.io/name: {{ include "overlay-check.name" . }}
+    helm.sh/chart: {{ include "overlay-check.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ include "overlay-check.name" . }}
+        app.kubernetes.io/name: {{ include "overlay-check.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+      serviceAccountName: {{ include "overlay-check.name" . }}

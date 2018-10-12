@@ -1,0 +1,9 @@
+apiVersion: v1
+appVersion: "0.0.1"
+description: DaemonSet to check overlay networking
+name: overlay-check
+version: 0.0.1
+home: https://github.com/superseb/overlay-check
+sources:
+- https://github.com/superseb/overlay-check
+icon: https://raw.githubusercontent.com/superseb/sebs-charts/master/logo.png
