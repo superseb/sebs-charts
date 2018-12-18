@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "goldpinger.fullname" . }}
+  labels:
+    app: goldpinger
+    app.kubernetes.io/name: {{ include "goldpinger.name" . }}
+    helm.sh/chart: {{ include "goldpinger.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "goldpinger.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app: goldpinger
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "goldpinger.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app: goldpinger
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              value: "80"
+            # injecting real hostname will make for easier to understand graphs/metrics
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          ports:
+            - containerPort: 80
+              name: http
+      serviceAccountName: {{ include "goldpinger.name" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
