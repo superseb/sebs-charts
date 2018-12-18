@@ -1,0 +1,1 @@
+Visit goldpinger on each node on port 30080
